@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Caller List"
+        android:text="Click to Call"
         android:textAllCaps="true"
         android:id="@+id/textView2"
         android:layout_gravity="center"
@@ -22,6 +22,7 @@
         android:layout_below="@id/textView2"
         android:layout_width="fill_parent"
         android:layout_height="150dp"
+
         android:layout_margin="10dp"
         android:divider="@color/sinch_purple"
         android:dividerHeight="1dp">
@@ -30,11 +31,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
         android:orientation="vertical"
-
+        android:visibility="gone"
             android:paddingLeft="40dp"
             android:paddingRight="40dp"
         android:id="@+id/numberInputLayout"
-        android:visibility="gone"
+
         android:layout_below="@+id/simpleListView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
@@ -59,6 +60,19 @@
 
             />
         </EditText>
+
+        <Button
+            android:id="@+id/callButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_call"
+            android:minHeight="56dp"
+            android:minWidth="132dp"
+            android:layout_centerHorizontal="true"/>
+
 
     </LinearLayout>
 
@@ -88,6 +102,7 @@
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textStyle="bold"/>
+
     </LinearLayout>
 
 
@@ -97,31 +112,11 @@
                   android:layout_alignParentBottom="true"
                   android:layout_centerHorizontal="true">
 
-        <Button
-                android:id="@+id/callButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-              android:layout_alignParentLeft="true"
-                android:background="@drawable/button_call"
-                android:minHeight="56dp"
-                android:minWidth="132dp"
-                android:layout_centerHorizontal="true"/>
-
-        <Button
-            android:id="@+id/callButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/callButton"
-            android:layout_marginBottom="20dp"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/button_call"
-            android:text="new call"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            android:minHeight="56dp"
-            android:minWidth="132dp"
-            android:layout_centerHorizontal="true"/>
+       <Button
+           android:layout_width="wrap_content"
+           android:id="@+id/callButton2"
+           android:layout_height="wrap_content"
+           android:text="Make a New Call!"/>
 
     </RelativeLayout>
 

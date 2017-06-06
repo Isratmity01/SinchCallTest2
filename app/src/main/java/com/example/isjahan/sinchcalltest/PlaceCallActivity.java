@@ -15,6 +15,7 @@ import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,10 +35,12 @@ public class PlaceCallActivity extends BaseActivity {
     private EditText mCallName;
     private ListView listView;
     TextView userName;
+    Boolean listClicked=false;
+    ArrayAdapter<String> arrayAdapter;
     LinearLayout linearLayout;
     private ArrayList<UserCalls>userCallsArrayList=new ArrayList<>();
     private ArrayList<String >names=new ArrayList<>();
-    String myself;
+    String myself,  remoteuserName ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,25 @@ public class PlaceCallActivity extends BaseActivity {
 
         linearLayout=(LinearLayout)findViewById(R.id.numberInputLayout);
         populatelistview();
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1,
+                                    int position, long arg3) {
+                // TODO Auto-generated method stub
+
+                // ListView Clicked item value
+                remoteuserName = (String) listView.getItemAtPosition(position);
+                listClicked=true;
+                callButtonClicked();
+                // Show Alert
+
+            }
+        });
+
+
     }
 
     @Override
@@ -73,13 +95,14 @@ public class PlaceCallActivity extends BaseActivity {
     }
 public void populatelistview()
 {
+
     final DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
     userCallsArrayList=dbHelper.getAllUser();
     for(int i=0;i<userCallsArrayList.size();i++)
     {
         names.add(userCallsArrayList.get(i).getUserName());
     }
-    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+   arrayAdapter = new ArrayAdapter<String>(
             this,
             android.R.layout.simple_list_item_1,
             names );
@@ -87,6 +110,24 @@ public void populatelistview()
     listView.setAdapter(arrayAdapter);
 
 }
+    public void refreshlistview()
+    {
+
+        final DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+        names.clear();
+        userCallsArrayList=dbHelper.getAllUser();
+        for(int i=0;i<userCallsArrayList.size();i++)
+        {
+            names.add(userCallsArrayList.get(i).getUserName());
+        }
+
+        listView.setChoiceMode(ListView.CHOICE_MODE_NONE);
+        listView.clearFocus();
+
+        arrayAdapter.notifyDataSetChanged();
+
+
+    }
     private void stopButtonClicked() {
         if (getSinchServiceInterface() != null) {
             getSinchServiceInterface().stopClient();
@@ -96,15 +137,19 @@ public void populatelistview()
 
     private void callButtonClicked() {
 
+        if(!listClicked)
+        {
+            remoteuserName = mCallName.getText().toString();
+            listClicked=false;
+        }
 
-        String userName = mCallName.getText().toString();
-        if (userName.isEmpty()) {
+        if (remoteuserName.isEmpty()) {
             Toast.makeText(this, "Please enter a user to call", Toast.LENGTH_LONG).show();
             return;
         }
 
         try {
-            Call call = getSinchServiceInterface().callUser(userName);
+            Call call = getSinchServiceInterface().callUser(remoteuserName);
             if (call == null) {
                 // Service failed for some reason, show a Toast and abort
                 Toast.makeText(this, "Service is not started. Try stopping the service and starting it again before "
@@ -155,7 +200,7 @@ public void populatelistview()
     @Override
     public void onRestart() {
         super.onRestart();
-        populatelistview();
+        refreshlistview();
 
     }
 }
