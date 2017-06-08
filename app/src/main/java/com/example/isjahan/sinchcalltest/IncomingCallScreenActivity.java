@@ -1,5 +1,7 @@
 package com.example.isjahan.sinchcalltest;
 
+import com.example.isjahan.sinchcalltest.dbhelper.DatabaseHelper;
+import com.example.isjahan.sinchcalltest.model.CallDetails;
 import com.sinch.android.rtc.MissingPermissionException;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
@@ -24,12 +26,13 @@ public class IncomingCallScreenActivity extends BaseActivity {
     static final String TAG = IncomingCallScreenActivity.class.getSimpleName();
     private String mCallId;
     private AudioPlayer mAudioPlayer;
-
+    String calltype;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.incoming);
-
+        Intent intent=getIntent();
+         calltype=intent.getStringExtra("IsIncoming");
         Button answer = (Button) findViewById(R.id.answerButton);
         answer.setOnClickListener(mClickListener);
         Button decline = (Button) findViewById(R.id.declineButton);
@@ -93,6 +96,21 @@ public class IncomingCallScreenActivity extends BaseActivity {
         @Override
         public void onCallEnded(Call call) {
             CallEndCause cause = call.getDetails().getEndCause();
+            if(calltype=="yes")
+            {
+                if(cause.toString()=="DENIED"||cause.toString()=="CANCELED")
+                {
+                    final CallDetails user = new CallDetails(call.getRemoteUserId(),System.currentTimeMillis(),"Missed");
+                    final DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+                    dbHelper.addUserLog(user);
+                }
+                else {
+
+                    final CallDetails user = new CallDetails(call.getRemoteUserId(),System.currentTimeMillis(),"Incoming");
+                    final DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+                    dbHelper.addUserLog(user);
+                }
+            }
             Log.d(TAG, "Call ended, cause: " + cause.toString());
             mAudioPlayer.stopRingtone();
             finish();

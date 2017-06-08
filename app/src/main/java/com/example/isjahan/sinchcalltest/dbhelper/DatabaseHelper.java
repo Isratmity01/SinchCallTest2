@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteDatabase;
         import android.util.Log;
 
 
+import com.example.isjahan.sinchcalltest.model.CallDetails;
 import com.example.isjahan.sinchcalltest.model.UserCalls;
 import com.example.isjahan.sinchcalltest.utility.Constant;
 
@@ -63,7 +64,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return database;
     }
 
-
     private void createDatabase(){
         boolean dbExists = checkDB();
         if(!dbExists){
@@ -85,32 +85,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return database;
     }
 
-
-
-
-
-
-
     public void createTable() {
-
-
         String CREATE_USERCALL = "CREATE TABLE IF NOT EXISTS " + Constant.Database.TABLE_USER + "("
                 + Constant.Database.User.UID + " VARCHAR PRIMARY KEY UNIQUE,"
                 + Constant.Database.User.IS_ME + " INTEGER DEFAULT 0"
                 + ")";
 
-
+        String CREATE_USERCALLDETAILS = "CREATE TABLE IF NOT EXISTS " + Constant.Database.TABLE_CALLLOG + "("
+                + Constant.Database.CallLog.CALLTO + " VARCHAR PRIMARY KEY UNIQUE,"
+                + Constant.Database.CallLog.INITIATEDAT + " INTEGER ,"
+                + Constant.Database.CallLog.CALLTYPE + " VARCHAR "
+                + ")";
 
 
         try {
             database.execSQL( CREATE_USERCALL );
-
+            database.execSQL( CREATE_USERCALLDETAILS );
             database.close();
         } catch (Exception e) {
             Log.e(getClass().getName(), "Error Creating Table");
         }
     }
+    public void addUserLog(CallDetails callDetails){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Constant.Database.CallLog.CALLTO, callDetails.getCallingTo());
+        values.put(Constant.Database.CallLog.INITIATEDAT, callDetails.getCallInTime());
+        values.put(Constant.Database.CallLog.CALLTYPE, callDetails.getCallType());
 
+
+
+        db.insertWithOnConflict(Constant.Database.TABLE_CALLLOG, Constant.Database.CallLog.CALLTO , values, SQLiteDatabase.CONFLICT_IGNORE);
+        db.close();
+    }
 
 
 
@@ -212,38 +219,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public ArrayList<CallDetails> getAllUserLog(){
 
+        ArrayList<CallDetails> alluser = new ArrayList<>();
 
+        String selectAll = "SELECT * FROM "+ Constant.Database.TABLE_CALLLOG +" ORDER BY initiatedat DESC ";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectAll, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    CallDetails user = new CallDetails();
+                    user.setCallingTo(cursor.getString(0));
+                    user.setCallInTime(cursor.getLong(1));
+                    user.setCallType(cursor.getString(2));
+                    alluser.add(user);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e){
+            Log.d(TAG, "nullpointer exception");
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return alluser;
 
-
-
-
-
-
-
-
-
+    }
 
     public ArrayList<UserCalls> getAllUser(){
-
         ArrayList<UserCalls> alluser = new ArrayList<>();
-
-
-
         String selectAll = "SELECT DISTINCT uid FROM "+ Constant.Database.TABLE_USER + " WHERE "+ Constant.Database.User.IS_ME + " = 0";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectAll, null);
-
-
-
-
         try {
             if (cursor.moveToFirst()) {
                 do {
                     UserCalls user = new UserCalls();
                     user.setUserName(cursor.getString(0));
-
-
                     alluser.add(user);
 
                 } while (cursor.moveToNext());
@@ -256,16 +269,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
 
-
-
         return alluser;
 
     }
-
-
-
-
-
 
     private boolean checkDB(){
         String path = DB_PATH + DB_NAME;
@@ -275,10 +281,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return false;
     }
-
-
-
-
     public synchronized void close(){
         if(this.database != null){
             this.database.close();

@@ -12,6 +12,7 @@ public class Constant {
         public static final String DATABASE_NAME = "mars-e7077";
         public static final int DATABASE_VERSION = 1;
         public static final String TABLE_USER = "callusers";
+        public static final String TABLE_CALLLOG = "userlog";
         public static final String TABLE_CHAT_ROOMS = "chat_rooms";
 
         public static class User{
@@ -20,9 +21,7 @@ public class Constant {
         }
 
         public static class CallLog{
-            public static String CALLBY = "uid";
             public static String CALLTO = "rid";
-            public static String CALLDURATION = "duration";
             public static String INITIATEDAT = "initiatedat";
             public static String CALLTYPE = "calltype";
 

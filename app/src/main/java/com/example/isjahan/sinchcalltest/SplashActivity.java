@@ -65,7 +65,7 @@ userCalls=databaseHelper.getMe();
     }
     private void openCallActivity() {
 
-        Intent mainActivity = new Intent(this, PlaceCallActivity.class);
+        Intent mainActivity = new Intent(this, LogActivity.class);
         mainActivity.putExtra("Name",userCalls.getUserName() );
         this.finish();
         startActivity(mainActivity);

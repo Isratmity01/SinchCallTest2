@@ -189,6 +189,7 @@ public class SinchService extends Service {
             dbHelper.addUserCall(user);
             Intent intent = new Intent(SinchService.this, IncomingCallScreenActivity.class);
             intent.putExtra(CALL_ID, call.getCallId());
+            intent.putExtra("IsIncoming","yes");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             SinchService.this.startActivity(intent);
         }

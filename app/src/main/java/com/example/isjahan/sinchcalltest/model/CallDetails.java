@@ -1,41 +1,26 @@
 package com.example.isjahan.sinchcalltest.model;
 
-import io.realm.RealmObject;
-import io.realm.annotations.Required;
 
 /**
  * Created by shadman.rahman on 04-Jun-17.
  */
 
-public class CallDetails extends RealmObject{
-    @Required
-    private String CallingBy;
-    @Required
+public class CallDetails{
+
+
     private String CallingTo;
-    @Required
-    private String CallDuration;
-    @Required
-    private String CallInTime;
-    @Required
+
+    private long CallInTime;
+
     private String CallType;
 
-    public CallDetails() {
-    }
-
-    public CallDetails(String callingBy, String callingTo, String callDuration, String callInTime, String callType) {
-        CallingBy = callingBy;
+    public CallDetails(String callingTo, long callInTime, String callType) {
         CallingTo = callingTo;
-        CallDuration = callDuration;
         CallInTime = callInTime;
         CallType = callType;
     }
 
-    public String getCallingBy() {
-        return CallingBy;
-    }
-
-    public void setCallingBy(String callingBy) {
-        CallingBy = callingBy;
+    public CallDetails() {
     }
 
     public String getCallingTo() {
@@ -46,19 +31,11 @@ public class CallDetails extends RealmObject{
         CallingTo = callingTo;
     }
 
-    public String getCallDuration() {
-        return CallDuration;
-    }
-
-    public void setCallDuration(String callDuration) {
-        CallDuration = callDuration;
-    }
-
-    public String getCallInTime() {
+    public long getCallInTime() {
         return CallInTime;
     }
 
-    public void setCallInTime(String callInTime) {
+    public void setCallInTime(long callInTime) {
         CallInTime = callInTime;
     }
 
@@ -69,5 +46,4 @@ public class CallDetails extends RealmObject{
     public void setCallType(String callType) {
         CallType = callType;
     }
-
 }

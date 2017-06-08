@@ -1,6 +1,5 @@
 package com.example.isjahan.sinchcalltest;
 
-import com.example.isjahan.sinchcalltest.controllers.RealmController;
 import com.example.isjahan.sinchcalltest.dbhelper.DatabaseHelper;
 import com.example.isjahan.sinchcalltest.model.UserCalls;
 import com.sinch.android.rtc.MissingPermissionException;
@@ -26,18 +25,17 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
 
 public class PlaceCallActivity extends BaseActivity {
 
     private Button mCallButton,mOtherCallButton;
-    private Realm realm;
+
     private EditText mCallName;
     private ListView listView;
     TextView userName;
     Boolean listClicked=false;
     ArrayAdapter<String> arrayAdapter;
-    LinearLayout linearLayout;
+    LinearLayout linearLayout,linearLayouttop;
     private ArrayList<UserCalls>userCallsArrayList=new ArrayList<>();
     private ArrayList<String >names=new ArrayList<>();
     String myself,  remoteuserName ;
@@ -51,6 +49,7 @@ public class PlaceCallActivity extends BaseActivity {
         mCallName = (EditText) findViewById(R.id.callName);
         mCallButton = (Button) findViewById(R.id.callButton);
         mCallButton.setEnabled(false);
+        linearLayouttop=(LinearLayout)findViewById(R.id.listholder);
         mCallButton.setOnClickListener(buttonClickListener);
         mOtherCallButton = (Button) findViewById(R.id.callButton2);
         mOtherCallButton.setEnabled(true);
@@ -102,6 +101,7 @@ public void populatelistview()
     {
         names.add(userCallsArrayList.get(i).getUserName());
     }
+    if(names.size()>0)linearLayouttop.setVisibility(View.VISIBLE);
    arrayAdapter = new ArrayAdapter<String>(
             this,
             android.R.layout.simple_list_item_1,
@@ -120,7 +120,7 @@ public void populatelistview()
         {
             names.add(userCallsArrayList.get(i).getUserName());
         }
-
+        if(names.size()>0)linearLayouttop.setVisibility(View.VISIBLE);
         listView.setChoiceMode(ListView.CHOICE_MODE_NONE);
         listView.clearFocus();
 

@@ -2,9 +2,7 @@ package com.example.isjahan.sinchcalltest;
 
 import com.example.isjahan.sinchcalltest.dbhelper.DatabaseHelper;
 import com.example.isjahan.sinchcalltest.model.UserCalls;
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
+
 import com.sinch.android.rtc.SinchError;
 
 import android.app.ProgressDialog;
@@ -28,7 +26,6 @@ public class LoginActivity extends BaseActivity implements SinchService.StartFai
     private EditText mLoginName;
     private ProgressDialog mSpinner;
     private String userName , uname;
-    Phonenumber.PhoneNumber bdNumberProto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +102,7 @@ public class LoginActivity extends BaseActivity implements SinchService.StartFai
 
     private void openPlaceCallActivity() {
 
-        Intent mainActivity = new Intent(this, PlaceCallActivity.class);
+        Intent mainActivity = new Intent(this, LogActivity.class);
         this.finish();
         startActivity(mainActivity);
     }
