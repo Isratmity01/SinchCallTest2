@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
     package="com.example.isjahan.sinchcalltest">
     <uses-feature
         android:name="android.hardware.microphone"
@@ -17,12 +18,13 @@
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+
+        android:theme="@style/MyMaterialTheme">
         <service android:name="com.example.isjahan.sinchcalltest.SinchService"></service>
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
+
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -34,8 +36,9 @@
             />
         <activity android:name=".LoginActivity" android:screenOrientation="portrait"/>
         <activity android:name=".IncomingCallScreenActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".LogActivity" android:screenOrientation="portrait"/>
         <activity android:name=".PlaceCallActivity" android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible|adjustPan"/>
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
     </application>
 
 </manifest>

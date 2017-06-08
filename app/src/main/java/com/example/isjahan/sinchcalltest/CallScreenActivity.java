@@ -1,7 +1,5 @@
 package com.example.isjahan.sinchcalltest;
 
-import com.example.isjahan.sinchcalltest.controllers.RealmController;
-import com.example.isjahan.sinchcalltest.model.CallDetails;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallEndCause;
@@ -21,7 +19,6 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.realm.Realm;
 
 public class CallScreenActivity extends BaseActivity {
 
@@ -32,7 +29,7 @@ public class CallScreenActivity extends BaseActivity {
     private UpdateCallDurationTask mDurationTask;
 
     private String mCallId;
-    private Realm realm;
+
     private TextView mCallDuration;
     private TextView mCallState;
     private TextView mCallerName;
@@ -54,7 +51,6 @@ public class CallScreenActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.callscreen);
-        this.realm= RealmController.with(this).getRealm();
         mAudioPlayer = new AudioPlayer(this);
         mCallDuration = (TextView) findViewById(R.id.callDuration);
         mCallerName = (TextView) findViewById(R.id.remoteUser);
@@ -139,6 +135,7 @@ public class CallScreenActivity extends BaseActivity {
         @Override
         public void onCallEnded(Call call) {
             CallEndCause cause = call.getDetails().getEndCause();
+            call.getDetails().getDuration();
             Log.d(TAG, "Call ended. Reason: " + cause.toString());
             mAudioPlayer.stopProgressTone();
             setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
