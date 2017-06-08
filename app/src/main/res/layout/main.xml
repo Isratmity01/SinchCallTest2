@@ -5,10 +5,21 @@
                 android:background="#ffffff"
                 android:padding="10dip"
                 tools:context=".MakeCallActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/listholder"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Click to Call"
+        android:text="Recent Incoming Calls"
         android:textAllCaps="true"
         android:id="@+id/textView2"
         android:layout_gravity="center"
@@ -27,6 +38,7 @@
         android:divider="@color/sinch_purple"
         android:dividerHeight="1dp">
     </ListView>
+    </LinearLayout>
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -36,7 +48,7 @@
             android:paddingRight="40dp"
         android:id="@+id/numberInputLayout"
 
-        android:layout_below="@+id/simpleListView"
+        android:layout_above="@+id/callButtonholder"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
@@ -56,7 +68,7 @@
                 android:textSize="32sp"
                 android:padding="10dp"
                 android:textColor="@color/sinch_purple"
-                android:background="@drawable/inputbox" android:inputType="textNoSuggestions">
+                android:background="@drawable/inputbox" android:inputType="number">
 
             />
         </EditText>
@@ -81,8 +93,7 @@
         android:paddingBottom="24dp"
         android:id="@+id/linearLayout"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/simpleListView"
-        android:layout_alignEnd="@+id/simpleListView">
+        android:layout_centerHorizontal="true">
         <TextView
                 android:id="@+id/infoText"
                 android:layout_width="wrap_content"
@@ -90,7 +101,7 @@
                 android:text="Hello: "
                 android:textAllCaps="true"
                 android:textColor="#000000"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 />
 
         <TextView
@@ -100,7 +111,7 @@
                 android:textColor="@color/sinch_purple"
                 android:text="Someone"
                 android:textAllCaps="true"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold"/>
 
     </LinearLayout>
@@ -108,7 +119,8 @@
 
     <RelativeLayout android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
-        android:gravity="center"
+                  android:gravity="center"
+        android:id="@+id/callButtonholder"
                   android:layout_alignParentBottom="true"
                   android:layout_centerHorizontal="true">
 

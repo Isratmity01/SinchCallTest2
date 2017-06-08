@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
             android:hint="01711xxxxxx"
-            android:textColorHint="@color/sinch_purple"
+            android:textColorHint="@color/hint"
                 android:inputType="number"
                 android:textSize="32sp"
                 android:padding="10dp"
