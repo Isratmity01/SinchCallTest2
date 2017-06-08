@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.Fragment_RecentCalls">
 
     <!-- TODO: Update blank fragment layout -->
@@ -11,15 +12,11 @@
         android:id="@+id/listholder"
         android:layout_height="wrap_content">
 
-        <ListView
-            android:id="@+id/simpleListView"
-            android:layout_width="fill_parent"
-            android:layout_height="350dp"
-            android:layout_below="@id/textView2"
-
-            android:layout_margin="10dp"
-            android:divider="@color/sinch_purple"
-            android:dividerHeight="1dp"></ListView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_all_user_listing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="LinearLayoutManager" />
 
 
     </LinearLayout>

@@ -3,6 +3,7 @@ package com.example.isjahan.sinchcalltest.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.ListView;
 
 import com.example.isjahan.sinchcalltest.LogActivity;
 import com.example.isjahan.sinchcalltest.R;
+import com.example.isjahan.sinchcalltest.adapter.UserCallAdapter;
 import com.example.isjahan.sinchcalltest.dbhelper.DatabaseHelper;
 import com.example.isjahan.sinchcalltest.model.CallDetails;
 
@@ -30,9 +32,10 @@ public class Fragment_RecentCalls extends Fragment {
     private String mParam2;
     ListView listView;
     LinearLayout linearLayout;
+    RecyclerView mRecyclerViewAllUserListing;
     private ArrayList<CallDetails> userCallsArrayList=new ArrayList<>();
     private ArrayList<String >names=new ArrayList<>();
-    ArrayAdapter<String> arrayAdapter;
+    UserCallAdapter adapter;
     public Fragment_RecentCalls() {
         // Required empty public constructor
     }
@@ -63,22 +66,8 @@ public class Fragment_RecentCalls extends Fragment {
     private void bindViews(View view) {
 
         linearLayout=(LinearLayout)view.findViewById(R.id.listholder);
-        listView=(ListView)view.findViewById(R.id.simpleListView);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mRecyclerViewAllUserListing = (RecyclerView) view.findViewById(R.id.recycler_view_all_user_listing);
 
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1,
-                                    int position, long arg3) {
-                // TODO Auto-generated method stub
-
-                // ListView Clicked item value
-               String remoteuserName = (String) listView.getItemAtPosition(position);
-
-                ((LogActivity)getActivity()).callButtonClicked(remoteuserName);
-                // Show Alert
-
-            }
-        });
     }
 
     @Override
@@ -96,7 +85,9 @@ public class Fragment_RecentCalls extends Fragment {
 
         final DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
         userCallsArrayList=dbHelper.getAllUserLog();
-        for(int i=0;i<userCallsArrayList.size();i++)
+        adapter=new UserCallAdapter(getActivity().getApplicationContext(),userCallsArrayList);
+        mRecyclerViewAllUserListing.setAdapter(adapter);
+     /*   for(int i=0;i<userCallsArrayList.size();i++)
         {
             names.add(userCallsArrayList.get(i).getCallingTo() + userCallsArrayList.get(i).getCallType());
         }
@@ -105,8 +96,8 @@ public class Fragment_RecentCalls extends Fragment {
                 getActivity().getApplicationContext(),
                 android.R.layout.simple_list_item_1,
                 names );
-
-        listView.setAdapter(arrayAdapter);
+*/
+        //listView.setAdapter(arrayAdapter);
 
     }
 
@@ -116,6 +107,10 @@ public class Fragment_RecentCalls extends Fragment {
         final DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
         names.clear();
         userCallsArrayList=dbHelper.getAllUserLog();
+
+        adapter.updateList(userCallsArrayList);
+
+   /*
         for(int i=0;i<userCallsArrayList.size();i++)
         {
             names.add(userCallsArrayList.get(i).getCallingTo() + userCallsArrayList.get(i).getCallType());
@@ -125,7 +120,7 @@ public class Fragment_RecentCalls extends Fragment {
         listView.clearFocus();
 
         arrayAdapter.notifyDataSetChanged();
-
+*/
 
     }
 }

@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabTextColor="#aec3e3"
+            app:tabIndicatorHeight="4dp"
             app:tabSelectedTextColor="@color/textColorPrimary"
             app:tabMode="fixed"
             app:tabGravity="fill"/>
