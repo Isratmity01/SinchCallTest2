@@ -92,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + ")";
 
         String CREATE_USERCALLDETAILS = "CREATE TABLE IF NOT EXISTS " + Constant.Database.TABLE_CALLLOG + "("
-                + Constant.Database.CallLog.CALLTO + " VARCHAR PRIMARY KEY UNIQUE,"
+                + Constant.Database.CallLog.CALLTO + " VARCHAR ,"
                 + Constant.Database.CallLog.INITIATEDAT + " INTEGER ,"
                 + Constant.Database.CallLog.CALLTYPE + " VARCHAR "
                 + ")";
