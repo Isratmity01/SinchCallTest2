@@ -96,9 +96,9 @@ public class IncomingCallScreenActivity extends BaseActivity {
         @Override
         public void onCallEnded(Call call) {
             CallEndCause cause = call.getDetails().getEndCause();
-            if(calltype=="yes")
+            if(calltype.equals("yes"))
             {
-                if(cause.toString()=="DENIED"||cause.toString()=="CANCELED")
+                if(cause.toString().equals("DENIED")||cause.toString().equals("CANCELED"))
                 {
                     final CallDetails user = new CallDetails(call.getRemoteUserId(),System.currentTimeMillis(),"Missed");
                     final DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());

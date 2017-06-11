@@ -150,9 +150,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectAll, null);
 
-
-
-
         try {
             if (cursor.moveToFirst()) {
                 do {
@@ -169,33 +166,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-
-
-
         return userCalls;
-
     }
-
-
-
-
-
-
-
     public UserCalls getUser( String uid){
 
         UserCalls user = new UserCalls();
-
         String selection = Constant.Database.User.UID+" = ? ";
         String[] selectionArgs = new String[] {uid};
-
-
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(Constant.Database.TABLE_USER, null,  selection, selectionArgs, null,  null, null, null);
-
-
-
-
         try {
             if (cursor.moveToFirst()) {
                 do {
@@ -212,17 +191,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-
-
-
         return user;
-
     }
 
     public ArrayList<CallDetails> getAllUserLog(){
 
         ArrayList<CallDetails> alluser = new ArrayList<>();
-
         String selectAll = "SELECT * FROM "+ Constant.Database.TABLE_CALLLOG +" ORDER BY initiatedat DESC ";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectAll, null);

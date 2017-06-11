@@ -14,21 +14,30 @@ import com.example.isjahan.sinchcalltest.model.CallDetails;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 
 
 public class UserCallAdapter extends RecyclerView.Adapter<UserCallAdapter.MyViewHolder> {
 
-    private List<CallDetails> callDetailses;
+    private ArrayList<CallDetails> callDetailses;
     Context mContext;
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, year, genre;
+    public class MyViewHolder extends RecyclerView.ViewHolder  {
+        public TextView title, genre;
+        ImageView callicon;
 
         public MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.person_name);
             genre = (TextView) view.findViewById(R.id.calltype);
+            callicon=(ImageView)view.findViewById(R.id.person_call);
+            view.setTag(view);
+           // view.setOnClickListener((View.OnClickListener) this);
            // year = (TextView) view.findViewById(R.id.year);
         }
+
+
+
+
     }
 
 
@@ -52,11 +61,18 @@ public class UserCallAdapter extends RecyclerView.Adapter<UserCallAdapter.MyView
         notifyDataSetChanged();
     }
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        CallDetails callDetails = callDetailses.get(position);
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
+        final CallDetails callDetails = callDetailses.get(position);
         holder.title.setText(callDetails.getCallingTo());
         holder.genre.setText(callDetails.getCallType());
-        //holder.year.setText(movie.getYear());
+        holder.callicon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new CallDetails(callDetailses.get(position).getCallingTo(),
+                        callDetailses.get(position).getCallInTime(),callDetailses.get(position).getCallType()));
+            }
+        });
+
     }
 
     @Override

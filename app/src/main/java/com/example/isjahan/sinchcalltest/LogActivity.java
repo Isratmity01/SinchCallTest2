@@ -54,8 +54,9 @@ public class LogActivity extends BaseActivity {
 
     private void setupViewPager(final ViewPager viewPager) {
         final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),getApplicationContext());
-        adapter.addFragment(new Fragment_PlaceCall(), "Place Call");
         adapter.addFragment(new Fragment_RecentCalls(), "Recent");
+        adapter.addFragment(new Fragment_PlaceCall(), "Contacts");
+
 
 
         viewPager.setAdapter(adapter);
@@ -65,7 +66,7 @@ public class LogActivity extends BaseActivity {
 
             public void onPageSelected(int position) {
                //if(position==1)adapter.notifyDataSetChanged();
-                Fragment_RecentCalls fragment = (Fragment_RecentCalls) adapter.getItem(1);
+                Fragment_RecentCalls fragment = (Fragment_RecentCalls) adapter.getItem(0);
                 fragment.refreshlistview();
             }
         });
