@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.isjahan.sinchcalltest.LogActivity;
 import com.example.isjahan.sinchcalltest.R;
@@ -20,8 +21,10 @@ import com.example.isjahan.sinchcalltest.model.CallDetails;
 
 import java.util.ArrayList;
 
+import de.greenrobot.event.EventBus;
 
-public class Fragment_RecentCalls extends Fragment {
+
+public class Fragment_RecentCalls extends Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,7 +39,10 @@ public class Fragment_RecentCalls extends Fragment {
     private ArrayList<CallDetails> userCallsArrayList=new ArrayList<>();
     private ArrayList<String >names=new ArrayList<>();
     UserCallAdapter adapter;
+    EventBus myEventBus;
+
     public Fragment_RecentCalls() {
+        myEventBus = EventBus.getDefault();
         // Required empty public constructor
     }
     public static Fragment_RecentCalls newInstance() {
@@ -50,6 +56,7 @@ public class Fragment_RecentCalls extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        EventBus.getDefault().register(this);
     }
 
     @Nullable
@@ -80,13 +87,24 @@ public class Fragment_RecentCalls extends Fragment {
     {
         populatelistview();
     }
+    public void onEvent(CallDetails event){
+        // your implementation
+        ((LogActivity)getActivity()).callButtonClicked(event.getCallingTo());
+    }
     public void populatelistview()
     {
 
         final DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
         userCallsArrayList=dbHelper.getAllUserLog();
-        adapter=new UserCallAdapter(getActivity().getApplicationContext(),userCallsArrayList);
-        mRecyclerViewAllUserListing.setAdapter(adapter);
+        try {
+            adapter=new UserCallAdapter(getActivity().getApplicationContext(),userCallsArrayList);
+            mRecyclerViewAllUserListing.setAdapter(adapter);
+            mRecyclerViewAllUserListing.setOnClickListener((View.OnClickListener) getActivity().getApplicationContext());
+        }catch (Exception e)
+        {
+
+        }
+
      /*   for(int i=0;i<userCallsArrayList.size();i++)
         {
             names.add(userCallsArrayList.get(i).getCallingTo() + userCallsArrayList.get(i).getCallType());
@@ -123,4 +141,6 @@ public class Fragment_RecentCalls extends Fragment {
 */
 
     }
+
+
 }
