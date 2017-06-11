@@ -68,7 +68,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginBottom="3dp"
                             android:layout_alignParentLeft="true"
-                            android:background="@drawable/callhead" />
+                            android:background="@drawable/outgoingcall" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

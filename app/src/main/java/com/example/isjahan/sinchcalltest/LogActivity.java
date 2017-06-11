@@ -25,6 +25,8 @@ import com.sinch.android.rtc.calling.Call;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * Created by shadman.rahman on 07-Jun-17.
  */
@@ -34,7 +36,7 @@ public class LogActivity extends BaseActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     String myself;
-
+EventBus myEventBus;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +68,7 @@ public class LogActivity extends BaseActivity {
 
             public void onPageSelected(int position) {
                //if(position==1)adapter.notifyDataSetChanged();
-                Fragment_RecentCalls fragment = (Fragment_RecentCalls) adapter.getItem(0);
-                fragment.refreshlistview();
+
             }
         });
     }

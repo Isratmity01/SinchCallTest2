@@ -18,6 +18,7 @@ import com.example.isjahan.sinchcalltest.R;
 import com.example.isjahan.sinchcalltest.adapter.UserCallAdapter;
 import com.example.isjahan.sinchcalltest.dbhelper.DatabaseHelper;
 import com.example.isjahan.sinchcalltest.model.CallDetails;
+import com.example.isjahan.sinchcalltest.model.CallEnded;
 
 import java.util.ArrayList;
 
@@ -90,6 +91,10 @@ public class Fragment_RecentCalls extends Fragment  {
     public void onEvent(CallDetails event){
         // your implementation
         ((LogActivity)getActivity()).callButtonClicked(event.getCallingTo());
+    }
+    public void onEvent(CallEnded event){
+        // your implementation
+       refreshlistview();
     }
     public void populatelistview()
     {

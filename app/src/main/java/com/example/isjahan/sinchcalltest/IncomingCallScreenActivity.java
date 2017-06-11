@@ -2,6 +2,7 @@ package com.example.isjahan.sinchcalltest;
 
 import com.example.isjahan.sinchcalltest.dbhelper.DatabaseHelper;
 import com.example.isjahan.sinchcalltest.model.CallDetails;
+import com.example.isjahan.sinchcalltest.model.CallEnded;
 import com.sinch.android.rtc.MissingPermissionException;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
@@ -20,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 public class IncomingCallScreenActivity extends BaseActivity {
 
@@ -112,6 +115,7 @@ public class IncomingCallScreenActivity extends BaseActivity {
                 }
             }
             Log.d(TAG, "Call ended, cause: " + cause.toString());
+            EventBus.getDefault().post(new CallEnded("yes"));
             mAudioPlayer.stopRingtone();
             finish();
         }

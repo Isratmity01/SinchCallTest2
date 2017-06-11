@@ -1,5 +1,6 @@
 package com.example.isjahan.sinchcalltest;
 
+import com.example.isjahan.sinchcalltest.model.CallEnded;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallEndCause;
@@ -18,6 +19,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import de.greenrobot.event.EventBus;
 
 
 public class CallScreenActivity extends BaseActivity {
@@ -136,6 +139,7 @@ public class CallScreenActivity extends BaseActivity {
         public void onCallEnded(Call call) {
             CallEndCause cause = call.getDetails().getEndCause();
             call.getDetails().getDuration();
+            EventBus.getDefault().post(new CallEnded("yes"));
             Log.d(TAG, "Call ended. Reason: " + cause.toString());
             mAudioPlayer.stopProgressTone();
             setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);

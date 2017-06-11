@@ -87,15 +87,15 @@ public class ContactListAdapter extends BaseAdapter {
             if (data.getThumb() != null) {
                 v.imageView.setImageBitmap(data.getThumb());
             } else {
-                v.imageView.setImageResource(R.drawable.callhead);
+                v.imageView.setImageResource(R.drawable.avatar);
             }
             // Seting round image
-            Bitmap bm = BitmapFactory.decodeResource(view.getResources(), R.drawable.callhead); // Load default image
+            Bitmap bm = BitmapFactory.decodeResource(view.getResources(), R.drawable.avatar); // Load default image
             roundedImage = new RoundedImage(bm);
             v.imageView.setImageDrawable(roundedImage);
         } catch (OutOfMemoryError e) {
             // Add default picture
-            v.imageView.setImageDrawable(this._c.getDrawable(R.drawable.callhead));
+            v.imageView.setImageDrawable(this._c.getDrawable(R.drawable.avatar));
             e.printStackTrace();
         }
 

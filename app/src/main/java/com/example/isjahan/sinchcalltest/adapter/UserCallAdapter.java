@@ -23,13 +23,14 @@ public class UserCallAdapter extends RecyclerView.Adapter<UserCallAdapter.MyView
     Context mContext;
     public class MyViewHolder extends RecyclerView.ViewHolder  {
         public TextView title, genre;
-        ImageView callicon;
+        ImageView callicon,type;
 
         public MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.person_name);
             genre = (TextView) view.findViewById(R.id.calltype);
             callicon=(ImageView)view.findViewById(R.id.person_call);
+            type=(ImageView)view.findViewById(R.id.typeicon);
             view.setTag(view);
            // view.setOnClickListener((View.OnClickListener) this);
            // year = (TextView) view.findViewById(R.id.year);
@@ -62,9 +63,23 @@ public class UserCallAdapter extends RecyclerView.Adapter<UserCallAdapter.MyView
     }
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
+
         final CallDetails callDetails = callDetailses.get(position);
         holder.title.setText(callDetails.getCallingTo());
         holder.genre.setText(callDetails.getCallType());
+        if(callDetails.getCallType().equals("outgoing"))
+        {
+            holder.type.setBackground(null);
+            holder.type.setImageResource(R.drawable.outgoingcall);
+        }
+        else if(callDetails.getCallType().equals("Missed")) {
+            holder.type.setBackground(null);
+            holder.type.setImageResource(R.drawable.missedcall);
+        }
+       else if(callDetails.getCallType().equals("Incoming")){
+            holder.type.setBackground(null);
+            holder.type.setImageResource(R.drawable.incoming);
+        }
         holder.callicon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
