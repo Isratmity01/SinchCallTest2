@@ -70,15 +70,15 @@ public class UserCallAdapter extends RecyclerView.Adapter<UserCallAdapter.MyView
         if(callDetails.getCallType().equals("outgoing"))
         {
             holder.type.setBackground(null);
-            holder.type.setImageResource(R.drawable.outgoingcall);
+            holder.type.setImageResource(R.drawable.ic_fill_173);
         }
         else if(callDetails.getCallType().equals("Missed")) {
             holder.type.setBackground(null);
-            holder.type.setImageResource(R.drawable.missedcall);
+            holder.type.setImageResource(R.drawable.ic_fill_171);
         }
        else if(callDetails.getCallType().equals("Incoming")){
             holder.type.setBackground(null);
-            holder.type.setImageResource(R.drawable.incoming);
+            holder.type.setImageResource(R.drawable.ic_fill_170);
         }
         holder.callicon.setOnClickListener(new View.OnClickListener() {
             @Override

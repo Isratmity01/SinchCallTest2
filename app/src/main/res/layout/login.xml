@@ -4,15 +4,20 @@
                 android:layout_height="match_parent"
                 android:background="@color/greyish"
                 android:padding="0dip"
+    android:layout_gravity="center"
                 tools:context=".LoginActivity">
 
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:gravity="top"
             android:orientation="vertical"
             android:paddingLeft="40dp"
-            android:paddingRight="40dp">
+            android:paddingRight="40dp"
+        android:layout_above="@+id/loginButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="147dp">
 
         <TextView
                 android:layout_width="wrap_content"
@@ -21,7 +26,7 @@
                 android:text="Enter Mobile Number"
                 android:textAllCaps="true"
                 android:id="@+id/textView" android:layout_gravity="center_horizontal"
-                android:textColor="@color/sinch_purple" android:textSize="20sp"/>
+                android:textColor="@color/colorPrimaryDark" android:textSize="20sp"/>
         <EditText
                 android:id="@+id/loginName"
                 android:layout_width="match_parent"
@@ -32,7 +37,7 @@
                 android:inputType="number"
                 android:textSize="32sp"
                 android:padding="10dp"
-                android:textColor="@color/sinch_purple"
+                android:textColor="@color/colorPrimaryDark"
                 android:background="@drawable/inputbox">
 
             <requestFocus/>
@@ -44,14 +49,17 @@
             android:id="@+id/loginButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="100dp"
             android:enabled="true"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/button_login"
+            android:background="@color/colorPrimaryDark"
+        android:text="LOGIN"
             android:minHeight="56dp"
             android:minWidth="132dp"
             android:textColor="@color/off_white"
             android:textSize="22sp"
-            android:textStyle="bold" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
+            android:textStyle="bold"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

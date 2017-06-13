@@ -81,19 +81,11 @@ public class LoginActivity extends BaseActivity implements SinchService.StartFai
             final DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
             dbHelper.addUserCall(user);
 
-            if (userName.isEmpty()) {
-                Toast.makeText(this, "Please enter a name", Toast.LENGTH_LONG).show();
-                return;
-            }
-
             if (!getSinchServiceInterface().isStarted()) {
                 getSinchServiceInterface().startClient(userName);
                 showSpinner();
             } else {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("LoginName", userName);
-                editor.apply();
+
                 openPlaceCallActivity();
             }
         }
@@ -101,7 +93,10 @@ public class LoginActivity extends BaseActivity implements SinchService.StartFai
     }
 
     private void openPlaceCallActivity() {
-
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("LoginName", userName);
+        editor.apply();
         Intent mainActivity = new Intent(this, LogActivity.class);
         this.finish();
         startActivity(mainActivity);

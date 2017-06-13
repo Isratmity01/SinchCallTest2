@@ -70,6 +70,7 @@
         <ImageView
             android:id="@+id/person_call"
             android:layout_width="23dp"
+            android:visibility="gone"
             android:layout_height="23dp"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"

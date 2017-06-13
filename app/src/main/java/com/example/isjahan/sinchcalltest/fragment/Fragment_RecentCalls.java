@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.isjahan.sinchcalltest.LogActivity;
@@ -41,6 +42,7 @@ public class Fragment_RecentCalls extends Fragment  {
     private ArrayList<String >names=new ArrayList<>();
     UserCallAdapter adapter;
     EventBus myEventBus;
+    TextView history;
 
     public Fragment_RecentCalls() {
         myEventBus = EventBus.getDefault();
@@ -75,6 +77,7 @@ public class Fragment_RecentCalls extends Fragment  {
 
         linearLayout=(LinearLayout)view.findViewById(R.id.listholder);
         mRecyclerViewAllUserListing = (RecyclerView) view.findViewById(R.id.recycler_view_all_user_listing);
+        history=(TextView)view.findViewById(R.id.noHistory);
 
     }
 
@@ -102,12 +105,13 @@ public class Fragment_RecentCalls extends Fragment  {
         final DatabaseHelper dbHelper = new DatabaseHelper(getActivity().getApplicationContext());
         userCallsArrayList=dbHelper.getAllUserLog();
         try {
+            if(userCallsArrayList.size()>0)history.setVisibility(View.GONE);
             adapter=new UserCallAdapter(getActivity().getApplicationContext(),userCallsArrayList);
             mRecyclerViewAllUserListing.setAdapter(adapter);
             mRecyclerViewAllUserListing.setOnClickListener((View.OnClickListener) getActivity().getApplicationContext());
         }catch (Exception e)
         {
-
+            if(userCallsArrayList.size()==0)history.setVisibility(View.VISIBLE);
         }
 
      /*   for(int i=0;i<userCallsArrayList.size();i++)

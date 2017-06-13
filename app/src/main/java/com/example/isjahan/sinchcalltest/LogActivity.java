@@ -2,8 +2,10 @@ package com.example.isjahan.sinchcalltest;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -16,6 +18,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.example.isjahan.sinchcalltest.dbhelper.DatabaseHelper;
+import com.example.isjahan.sinchcalltest.fragment.Fragment_Contacts;
 import com.example.isjahan.sinchcalltest.fragment.Fragment_RecentCalls;
 import com.example.isjahan.sinchcalltest.fragment.Fragment_PlaceCall;
 import com.example.isjahan.sinchcalltest.model.CallDetails;
@@ -41,7 +44,8 @@ EventBus myEventBus;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maintab);
-        Intent intent=getIntent();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        myself = prefs.getString("LoginName", "");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -49,7 +53,7 @@ EventBus myEventBus;
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
-        myself= intent.getStringExtra("Name");
+
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -57,20 +61,13 @@ EventBus myEventBus;
     private void setupViewPager(final ViewPager viewPager) {
         final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),getApplicationContext());
         adapter.addFragment(new Fragment_RecentCalls(), "Recent");
-        adapter.addFragment(new Fragment_PlaceCall(), "Contacts");
+        adapter.addFragment(new Fragment_Contacts(), "Contacts");
+        adapter.addFragment(new Fragment_PlaceCall(), "Call");
 
 
 
         viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener  (new ViewPager.OnPageChangeListener() {
-            public void onPageScrollStateChanged(int state) {}
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
-            public void onPageSelected(int position) {
-               //if(position==1)adapter.notifyDataSetChanged();
-
-            }
-        });
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

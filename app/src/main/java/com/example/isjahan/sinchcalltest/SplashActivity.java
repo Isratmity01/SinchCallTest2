@@ -1,8 +1,10 @@
 package com.example.isjahan.sinchcalltest;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -66,7 +68,10 @@ userCalls=databaseHelper.getMe();
     private void openCallActivity() {
 
         Intent mainActivity = new Intent(this, LogActivity.class);
-        mainActivity.putExtra("Name",userCalls.getUserName() );
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("LoginName", userCalls.getUserName());
+        editor.apply();
         this.finish();
         startActivity(mainActivity);
     }
