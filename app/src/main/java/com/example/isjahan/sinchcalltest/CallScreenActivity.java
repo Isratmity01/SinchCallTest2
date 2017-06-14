@@ -7,11 +7,13 @@ import com.sinch.android.rtc.calling.CallEndCause;
 import com.sinch.android.rtc.calling.CallListener;
 
 import android.media.AudioManager;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import de.greenrobot.event.EventBus;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class CallScreenActivity extends BaseActivity {
@@ -36,6 +39,7 @@ public class CallScreenActivity extends BaseActivity {
     private TextView mCallDuration;
     private TextView mCallState;
     private TextView mCallerName;
+    ImageView imageView;
     Call call;
     private class UpdateCallDurationTask extends TimerTask {
 
@@ -53,11 +57,13 @@ public class CallScreenActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.callscreen);
+        setContentView(R.layout.new_callscreen);
         mAudioPlayer = new AudioPlayer(this);
         mCallDuration = (TextView) findViewById(R.id.callDuration);
         mCallerName = (TextView) findViewById(R.id.remoteUser);
         mCallState = (TextView) findViewById(R.id.callState);
+        imageView=(CircleImageView)findViewById(R.id.profile_image) ;
+        imageView.setImageResource(R.drawable.callicon);
         Button endCallButton = (Button) findViewById(R.id.hangupButton);
 
         endCallButton.setOnClickListener(new OnClickListener() {
@@ -129,7 +135,14 @@ public class CallScreenActivity extends BaseActivity {
     private void updateCallDuration() {
         Call call = getSinchServiceInterface().getCall(mCallId);
         if (call != null) {
-            mCallDuration.setText(formatTimespan(call.getDetails().getDuration()));
+            if (call.getDetails().getDuration() == 0) {
+                mCallState.setVisibility(View.VISIBLE);
+                mCallDuration.setVisibility(View.GONE);
+            } else {
+                mCallState.setVisibility(View.GONE);
+                mCallDuration.setVisibility(View.VISIBLE);
+                mCallDuration.setText(formatTimespan(call.getDetails().getDuration()));
+            }
         }
     }
 

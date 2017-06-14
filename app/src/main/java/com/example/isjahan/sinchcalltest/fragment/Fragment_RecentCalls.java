@@ -45,7 +45,7 @@ public class Fragment_RecentCalls extends Fragment  {
     TextView history;
 
     public Fragment_RecentCalls() {
-        myEventBus = EventBus.getDefault();
+
         // Required empty public constructor
     }
     public static Fragment_RecentCalls newInstance() {
@@ -58,7 +58,7 @@ public class Fragment_RecentCalls extends Fragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        myEventBus = EventBus.getDefault();
         EventBus.getDefault().register(this);
     }
 

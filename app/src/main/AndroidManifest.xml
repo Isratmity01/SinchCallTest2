@@ -21,9 +21,9 @@
         android:label="@string/app_name"
 
         android:theme="@style/MyMaterialTheme">
-        <service android:name="com.example.isjahan.sinchcalltest.SinchService">
+        <service android:name="com.example.isjahan.sinchcalltest.SinchService"
 
-        </service>
+        />
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"

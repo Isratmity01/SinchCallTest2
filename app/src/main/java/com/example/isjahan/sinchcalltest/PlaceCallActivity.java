@@ -200,7 +200,7 @@ public void populatelistview()
     @Override
     public void onRestart() {
         super.onRestart();
-        refreshlistview();
+      //  refreshlistview();
 
     }
 }

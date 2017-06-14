@@ -16,6 +16,8 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +35,11 @@ public class IncomingCallScreenActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.incoming);
+        setContentView(R.layout.new_incoming);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         Intent intent=getIntent();
          calltype=intent.getStringExtra("IsIncoming");
         Button answer = (Button) findViewById(R.id.answerButton);
@@ -67,6 +73,7 @@ public class IncomingCallScreenActivity extends BaseActivity {
                 call.answer();
                 Intent intent = new Intent(this, CallScreenActivity.class);
                 intent.putExtra(SinchService.CALL_ID, mCallId);
+                this.finish();
                 startActivity(intent);
             } catch (MissingPermissionException e) {
                 ActivityCompat.requestPermissions(this, new String[]{e.getRequiredPermission()}, 0);
