@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Vibrator;
 import android.util.Log;
 
 import java.io.FileInputStream;
@@ -17,7 +18,7 @@ public class AudioPlayer {
     static final String LOG_TAG = AudioPlayer.class.getSimpleName();
 
     private Context mContext;
-
+    Vibrator vibrator;
     private MediaPlayer mPlayer;
 
     private AudioTrack mProgressTone;
@@ -29,11 +30,7 @@ public class AudioPlayer {
     }
 
     public void playRingtone() {
-        AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 
-        // Honour silent mode
-        switch (audioManager.getRingerMode()) {
-            case AudioManager.RINGER_MODE_NORMAL:
                 mPlayer = new MediaPlayer();
                 mPlayer.setAudioStreamType(AudioManager.STREAM_RING);
 
@@ -48,16 +45,33 @@ public class AudioPlayer {
                 }
                 mPlayer.setLooping(true);
                 mPlayer.start();
-                break;
-        }
-    }
 
+
+    }
+    public void makevibrate() {
+
+                 vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+
+// Start without a delay
+// Each element then alternates between vibrate, sleep, vibrate, sleep...
+                long[] pattern = {0, 100, 1000, 300, 200, 100, 500, 200, 100};
+
+// The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+        vibrator.vibrate(pattern, 3);
+
+
+    }
     public void stopRingtone() {
+
         if (mPlayer != null) {
             mPlayer.stop();
             mPlayer.release();
             mPlayer = null;
         }
+        if(vibrator!=null)
+
+            vibrator.cancel();
+
     }
 
     public void playProgressTone() {

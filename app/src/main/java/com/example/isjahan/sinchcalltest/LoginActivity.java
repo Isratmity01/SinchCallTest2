@@ -5,17 +5,25 @@ import com.example.isjahan.sinchcalltest.model.UserCalls;
 
 import com.sinch.android.rtc.SinchError;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +34,7 @@ public class LoginActivity extends BaseActivity implements SinchService.StartFai
     private EditText mLoginName;
     private ProgressDialog mSpinner;
     private String userName , uname;
+    final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 175;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +44,11 @@ public class LoginActivity extends BaseActivity implements SinchService.StartFai
             mLoginName = (EditText) findViewById(R.id.loginName);
 
             mLoginButton = (Button) findViewById(R.id.loginButton);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ) {
+            checkPermissions();
+            //user is using app for the first time
+
+        }
             mLoginButton.setEnabled(false);
             mLoginButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -58,7 +72,36 @@ public class LoginActivity extends BaseActivity implements SinchService.StartFai
         }
         super.onPause();
     }
+    private void checkPermissions() {
+        List<String> permissions = new ArrayList<>();
+        String message = "mars permissions:";
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.READ_CONTACTS);
+            message += "\n to get contacts from phone.";
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.RECORD_AUDIO);
+            message += "\nfor calling funcion.";
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.READ_PHONE_STATE);
+            message += "\nfor calling funcion.";
+            //requestReadPhoneStatePermission();
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.MODIFY_AUDIO_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.MODIFY_AUDIO_SETTINGS);
+            message += "\nfor calling funcion.";
+            //requestReadPhoneStatePermission();
+        }
 
+        if (!permissions.isEmpty()) {
+            // Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            String[] params = permissions.toArray(new String[permissions.size()]);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(params, REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+            }
+        } // else: We already have permissions, so handle as normal
+    }
     @Override
     public void onStartFailed(SinchError error) {
         Toast.makeText(this, error.toString(), Toast.LENGTH_LONG).show();
@@ -115,4 +158,35 @@ public class LoginActivity extends BaseActivity implements SinchService.StartFai
         Matcher matcher = pattern.matcher(number);
         return matcher.matches();
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
+                Map<String, Integer> perms = new HashMap<>();
+                // Initial
+                perms.put(Manifest.permission.RECORD_AUDIO, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.MODIFY_AUDIO_SETTINGS, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.READ_PHONE_STATE, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.READ_CONTACTS, PackageManager.PERMISSION_GRANTED);
+
+                // Fill with results
+                for (int i = 0; i < permissions.length; i++)
+                    perms.put(permissions[i], grantResults[i]);
+                // Check for ACCESS_FINE_LOCATION and WRITE_EXTERNAL_STORAGE
+                Boolean recordaudio = perms.get(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
+                Boolean modaudio = perms.get(Manifest.permission.MODIFY_AUDIO_SETTINGS) == PackageManager.PERMISSION_GRANTED;
+                Boolean phonestate = perms.get(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
+                Boolean contactstate = perms.get(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
+                if (recordaudio && modaudio&& phonestate &&contactstate) {
+                    // All Permissions Granted
+                   return;
+                    //Toast.makeText(PhoneRegActivity.this, "Thanks for permission", Toast.LENGTH_SHORT).show();
+                }
+            }
+            break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
 }

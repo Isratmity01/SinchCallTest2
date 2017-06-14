@@ -9,8 +9,10 @@ import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallEndCause;
 import com.sinch.android.rtc.calling.CallListener;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -48,7 +50,17 @@ public class IncomingCallScreenActivity extends BaseActivity {
         decline.setOnClickListener(mClickListener);
 
         mAudioPlayer = new AudioPlayer(this);
-        mAudioPlayer.playRingtone();
+        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+       switch (audioManager.getRingerMode())
+        {
+                case AudioManager.RINGER_MODE_NORMAL:
+                    mAudioPlayer.playRingtone();
+                    break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                mAudioPlayer.makevibrate();
+                break;
+        }
+
         mCallId = getIntent().getStringExtra(SinchService.CALL_ID);
     }
 
