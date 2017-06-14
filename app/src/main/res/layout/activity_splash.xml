@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/cup"
+    android:layout_margin="30dp"
+    android:background="@drawable/ic_stickman"
 
     android:fitsSystemWindows="true">
 
