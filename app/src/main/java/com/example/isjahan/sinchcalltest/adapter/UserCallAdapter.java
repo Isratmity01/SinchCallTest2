@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.isjahan.sinchcalltest.R;
 import com.example.isjahan.sinchcalltest.model.CallDetails;
+import com.example.isjahan.sinchcalltest.utility.DateTimeUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,9 @@ public class UserCallAdapter extends RecyclerView.Adapter<UserCallAdapter.MyView
 
         final CallDetails callDetails = callDetailses.get(position);
         holder.title.setText(callDetails.getCallingTo());
-        holder.genre.setText(callDetails.getCallType());
+        String time=DateTimeUtility.returnTime(callDetails.getCallInTime());
+
+        holder.genre.setText(time);
         if(callDetails.getCallType().equals("outgoing"))
         {
             holder.type.setBackground(null);

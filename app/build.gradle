@@ -3,7 +3,7 @@ repositories {
     flatDir {
         dirs 'libs'
     }
-
+    maven { url "https://jitpack.io" }
 }
 
 android {
@@ -38,6 +38,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     testCompile 'junit:junit:4.12'
 }
