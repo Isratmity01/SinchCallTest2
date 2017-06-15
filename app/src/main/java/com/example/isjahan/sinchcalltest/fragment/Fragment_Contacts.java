@@ -186,7 +186,6 @@ public class Fragment_Contacts extends Fragment {
                 }
             });
 
-            listView.setFastScrollEnabled(true);
         }
     }
 

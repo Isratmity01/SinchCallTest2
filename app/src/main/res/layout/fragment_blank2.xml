@@ -11,8 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
 
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+
         android:id="@+id/numberInputLayout"
 
         android:layout_above="@+id/callButtonholder"
@@ -24,6 +23,7 @@
             android:layout_below="@+id/frag"
             android:layout_width="match_parent"
             android:background="#ffffff"
+            android:divider="#d5d5db"
             android:layout_height="match_parent"
             android:id="@+id/contacts_list"></ListView>
 
