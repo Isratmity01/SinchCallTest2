@@ -101,8 +101,8 @@
 
         <Button
             android:id="@+id/muteButton"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_marginRight="25dp"
             android:background="@drawable/ic_mute"
             />
@@ -111,15 +111,16 @@
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_marginRight="25dp"
-            android:background="@drawable/ic_decline_call"
+            android:background="@drawable/ic_decline_incall"
             />
 
         <Button
             android:id="@+id/speakerButton"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/ic_speakeroff"
             android:layout_toRightOf="@id/declineButton"
-            android:background="@drawable/ic_speaker" />
+             />
 
     </LinearLayout>
     </RelativeLayout>

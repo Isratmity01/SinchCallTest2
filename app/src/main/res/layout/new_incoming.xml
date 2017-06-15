@@ -81,7 +81,7 @@
         android:textColor="@color/colorPrimary"
         android:layout_marginBottom="51dp"
         android:textSize="14sp"
-        android:text="Tap in Blue Button to Receive Call"
+        android:text="Tap in Green Button to Receive Call"
 
         android:layout_alignParentBottom="true"
        />

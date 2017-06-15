@@ -6,6 +6,8 @@ import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallEndCause;
 import com.sinch.android.rtc.calling.CallListener;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.Image;
 import android.os.Bundle;
@@ -13,9 +15,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.util.List;
 import java.util.Locale;
@@ -29,13 +33,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CallScreenActivity extends BaseActivity {
 
     static final String TAG = CallScreenActivity.class.getSimpleName();
-
+    private int flag = 0;
+    private int flagmic = 0;
     private AudioPlayer mAudioPlayer;
     private Timer mTimer;
     private UpdateCallDurationTask mDurationTask;
-
+private Button speakerButton,micButton;
     private String mCallId;
-
+    AudioManager audioManager ;
     private TextView mCallDuration;
     private TextView mCallState;
     private TextView mCallerName;
@@ -65,7 +70,8 @@ public class CallScreenActivity extends BaseActivity {
         imageView=(CircleImageView)findViewById(R.id.profile_image) ;
         imageView.setImageResource(R.drawable.callicon);
         Button endCallButton = (Button) findViewById(R.id.hangupButton);
-
+        speakerButton=(Button)findViewById(R.id.speakerButton);
+        micButton=(Button)findViewById(R.id.muteButton);
         endCallButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +79,41 @@ public class CallScreenActivity extends BaseActivity {
             }
         });
         mCallId = getIntent().getStringExtra(SinchService.CALL_ID);
+        audioManager= (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setSpeakerphoneOn(false);
+
+        speakerButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (flag == 0) {
+                    flag = 1; // 1 => Button ON
+                    speakerButton.setBackgroundResource(R.drawable.ic_speakeron);
+                    Toast.makeText(CallScreenActivity.this,"start",Toast.LENGTH_SHORT).show();
+                    audioManager.setSpeakerphoneOn(true);
+                } else {
+                    flag = 0; // 0 => Button OFF
+                    speakerButton.setBackgroundResource(R.drawable.ic_speakeroff);
+               //     Toast.makeText(CallScreenActivity.this,"off",Toast.LENGTH_SHORT).show();
+                    audioManager.setSpeakerphoneOn(false);
+                }
+            }
+        });
+        micButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (flagmic == 0) {
+                    flagmic = 1; // 1 => Button ON
+                    micButton.setBackgroundResource(R.drawable.ic_muteon);
+                  //  Toast.makeText(CallScreenActivity.this,"start",Toast.LENGTH_SHORT).show();
+                    audioManager.setMicrophoneMute(true);
+                } else {
+                    flagmic = 0; // 0 => Button OFF
+                    micButton.setBackgroundResource(R.drawable.ic_mute);
+                    Toast.makeText(CallScreenActivity.this,"off",Toast.LENGTH_SHORT).show();
+                    audioManager.setMicrophoneMute(false);
+                }
+            }
+        });
     }
 
     @Override
@@ -81,20 +122,19 @@ public class CallScreenActivity extends BaseActivity {
         if (call != null) {
             call.addCallListener(new SinchCallListener());
             mCallerName.setText(call.getRemoteUserId());
-            mCallState.setText(call.getState().toString());
+            if(call.getState().toString().equals("INITIATING"))mCallState.setText("Calling");
+            else mCallState.setText(call.getState().toString());
         } else {
             Log.e(TAG, "Started with invalid callId, aborting.");
             finish();
         }
     }
-
     @Override
     public void onPause() {
         super.onPause();
         mDurationTask.cancel();
         mTimer.cancel();
     }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -102,7 +142,6 @@ public class CallScreenActivity extends BaseActivity {
         mDurationTask = new UpdateCallDurationTask();
         mTimer.schedule(mDurationTask, 0, 500);
     }
-
     @Override
     public void onBackPressed() {
         // User should exit activity by ending call, not by going back.
@@ -110,7 +149,6 @@ public class CallScreenActivity extends BaseActivity {
 
     private void endCall() {
         mAudioPlayer.stopProgressTone();//
-
         //CallDetails callDetails=realm.createObject(CallDetails.class);
         Call call = getSinchServiceInterface().getCall(mCallId);
         String time=TimeActivity.getCurrentTime(getApplicationContext());
@@ -125,13 +163,11 @@ public class CallScreenActivity extends BaseActivity {
         }
         finish();
     }
-
     private String formatTimespan(int totalSeconds) {
         long minutes = totalSeconds / 60;
         long seconds = totalSeconds % 60;
         return String.format(Locale.US, "%02d:%02d", minutes, seconds);
     }
-
     private void updateCallDuration() {
         Call call = getSinchServiceInterface().getCall(mCallId);
         if (call != null) {
@@ -145,9 +181,7 @@ public class CallScreenActivity extends BaseActivity {
             }
         }
     }
-
     private class SinchCallListener implements CallListener {
-
         @Override
         public void onCallEnded(Call call) {
             CallEndCause cause = call.getDetails().getEndCause();
@@ -160,7 +194,6 @@ public class CallScreenActivity extends BaseActivity {
             Toast.makeText(CallScreenActivity.this, endMsg, Toast.LENGTH_LONG).show();
             endCall();
         }
-
         @Override
         public void onCallEstablished(Call call) {
             Log.d(TAG, "Call established");
@@ -168,17 +201,14 @@ public class CallScreenActivity extends BaseActivity {
             mCallState.setText(call.getState().toString());
             setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
         }
-
         @Override
         public void onCallProgressing(Call call) {
             Log.d(TAG, "Call progressing");
             mAudioPlayer.playProgressTone();
         }
-
         @Override
         public void onShouldSendPushNotification(Call call, List<PushPair> pushPairs) {
             // Send a push through your push provider here, e.g. GCM
         }
-
     }
 }
