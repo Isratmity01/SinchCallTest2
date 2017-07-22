@@ -2,61 +2,23 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#ffffff"
-                android:padding="10dip"
+                android:background="@drawable/startbg"
+                android:padding="0dip"
                 tools:context=".MakeCallActivity">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:id="@+id/listholder"
-        android:visibility="gone"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Recent Incoming Calls"
-        android:textAllCaps="true"
-        android:id="@+id/textView2"
-        android:layout_gravity="center"
-        android:textColor="@color/sinch_purple"
-        android:textSize="20sp"
-        android:layout_below="@+id/linearLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="11dp" />
-    <ListView
-        android:id="@+id/simpleListView"
-        android:layout_below="@id/textView2"
-        android:layout_width="fill_parent"
-        android:layout_height="150dp"
 
-        android:layout_margin="10dp"
-        android:divider="@color/sinch_purple"
-        android:dividerHeight="1dp">
-    </ListView>
-    </LinearLayout>
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
             android:paddingLeft="40dp"
-            android:paddingRight="40dp"
-        android:id="@+id/numberInputLayout"
-
-        android:layout_above="@+id/callButtonholder"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+            android:paddingRight="40dp" android:id="@+id/numberInputLayout">
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="Write Number"
+                android:text="Enter recipient name"
                 android:textAllCaps="true"
                 android:id="@+id/textView" android:layout_gravity="center_horizontal"
                 android:textColor="@color/sinch_purple" android:textSize="20sp"/>
@@ -68,40 +30,24 @@
                 android:textSize="32sp"
                 android:padding="10dp"
                 android:textColor="@color/sinch_purple"
-                android:background="@drawable/inputbox" android:inputType="number">
+                android:background="@drawable/inputbox" android:inputType="textNoSuggestions">
 
-            />
+            <requestFocus/>
         </EditText>
-
-        <Button
-            android:id="@+id/callButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:background="@drawable/button_call"
-            android:minHeight="56dp"
-            android:minWidth="132dp"
-            android:layout_centerHorizontal="true"/>
-
 
     </LinearLayout>
 
 
-    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:paddingBottom="24dp"
-        android:id="@+id/linearLayout"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
+    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_above="@+id/numberInputLayout"
+            android:paddingBottom="24dp" android:layout_centerHorizontal="true">
         <TextView
                 android:id="@+id/infoText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hello: "
+                android:text="Logged in as: "
                 android:textAllCaps="true"
-                android:textColor="#000000"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/sinch_purple"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 />
 
         <TextView
@@ -111,24 +57,38 @@
                 android:textColor="@color/sinch_purple"
                 android:text="Someone"
                 android:textAllCaps="true"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textStyle="bold"/>
-
     </LinearLayout>
 
 
     <RelativeLayout android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
-                  android:gravity="center"
-        android:id="@+id/callButtonholder"
                   android:layout_alignParentBottom="true"
                   android:layout_centerHorizontal="true">
 
-       <Button
-           android:layout_width="wrap_content"
-           android:id="@+id/callButton2"
-           android:layout_height="wrap_content"
-           android:text="Make a New Call!"/>
+        <Button
+                android:id="@+id/callButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/button_call"
+                android:minHeight="56dp"
+                android:minWidth="132dp"
+                android:layout_centerHorizontal="true"/>
+
+        <Button
+                android:id="@+id/stopButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/callButton"
+                android:layout_marginBottom="10dp"
+                android:background="@android:color/transparent"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/sinch_purple"
+                android:textAllCaps="true"
+                android:text="Stop service" android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
 

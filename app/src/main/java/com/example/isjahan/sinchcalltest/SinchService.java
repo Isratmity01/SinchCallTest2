@@ -1,8 +1,7 @@
 package com.example.isjahan.sinchcalltest;
 
-import com.example.isjahan.sinchcalltest.dbhelper.DatabaseHelper;
-import com.example.isjahan.sinchcalltest.model.UserCalls;
 import com.sinch.android.rtc.ClientRegistration;
+import com.sinch.android.rtc.NotificationResult;
 import com.sinch.android.rtc.Sinch;
 import com.sinch.android.rtc.SinchClient;
 import com.sinch.android.rtc.SinchClientListener;
@@ -12,31 +11,47 @@ import com.sinch.android.rtc.calling.CallClient;
 import com.sinch.android.rtc.calling.CallClientListener;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class SinchService extends Service {
 
-    private static final String APP_KEY = "91ca1e4b-8eb7-4155-b86f-8d57e2232ac0";
-    private static final String APP_SECRET = "vaouN2lVz0qCfMg7pJe2rA==";
-    private static final String ENVIRONMENT = "sandbox.sinch.com";
+    private static final String APP_KEY = "53785964-81ee-477f-96dc-2f59746821d1";
+    private static final String APP_SECRET = "svOz21N0FEqFvyQReipAAg==";
+    private static final String ENVIRONMENT = "clientapi.sinch.com";
 
     public static final String CALL_ID = "CALL_ID";
     static final String TAG = SinchService.class.getSimpleName();
 
+    private PersistedSettings mSettings;
     private SinchServiceInterface mSinchServiceInterface = new SinchServiceInterface();
     private SinchClient mSinchClient;
-    private String mUserId;
 
     private StartFailedListener mListener;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mSettings = new PersistedSettings(getApplicationContext());
+    }
+
+    private void createClient(String username) {
+        mSinchClient = Sinch.getSinchClientBuilder().context(getApplicationContext()).userId(username)
+                .applicationKey(APP_KEY)
+                .applicationSecret(APP_SECRET)
+                .environmentHost(ENVIRONMENT).build();
+
+        mSinchClient.setSupportCalling(true);
+        mSinchClient.setSupportManagedPush(true);
+
+        mSinchClient.checkManifest();
+
+        mSinchClient.addSinchClientListener(new MySinchClientListener());
+        mSinchClient.getCallClient().addCallClientListener(new SinchCallClientListener());
     }
 
     @Override
@@ -47,24 +62,13 @@ public class SinchService extends Service {
         super.onDestroy();
     }
 
-    private void start(String userName) {
+    private void start(String username) {
         if (mSinchClient == null) {
-            mUserId = userName;
-
-            mSinchClient = Sinch.getSinchClientBuilder().context(getApplicationContext()).userId(userName)
-                    .applicationKey(APP_KEY)
-                    .applicationSecret(APP_SECRET)
-                    .environmentHost(ENVIRONMENT).build();
-
-            mSinchClient.setSupportCalling(true);
-            mSinchClient.startListeningOnActiveConnection();
-
-            mSinchClient.addSinchClientListener(new MySinchClientListener());
-            // Permission READ_PHONE_STATE is needed to respect native calls.
-            mSinchClient.getCallClient().setRespectNativeCalls(false);
-            mSinchClient.getCallClient().addCallClientListener(new SinchCallClientListener());
-            mSinchClient.start();
+            mSettings.setUsername(username);
+            createClient(username);
         }
+        Log.d(TAG, "Starting SinchClient");
+        mSinchClient.start();
     }
 
     private void stop() {
@@ -85,19 +89,12 @@ public class SinchService extends Service {
 
     public class SinchServiceInterface extends Binder {
 
-        public Call callPhoneNumber(String phoneNumber) {
-            return mSinchClient.getCallClient().callPhoneNumber(phoneNumber);
-        }
-
         public Call callUser(String userId) {
-            if (mSinchClient == null) {
-                return null;
-            }
             return mSinchClient.getCallClient().callUser(userId);
         }
 
         public String getUserName() {
-            return mUserId;
+            return mSinchClient.getLocalUserId();
         }
 
         public boolean isStarted() {
@@ -119,9 +116,20 @@ public class SinchService extends Service {
         public Call getCall(String callId) {
             return mSinchClient.getCallClient().getCall(callId);
         }
+
+        public NotificationResult relayRemotePushNotificationPayload(Intent intent) {
+            if (mSinchClient == null && !mSettings.getUsername().isEmpty()) {
+                createClient(mSettings.getUsername());
+            } else if (mSinchClient == null && mSettings.getUsername().isEmpty()) {
+                Log.e(TAG, "Can't start a SinchClient as no username is available, unable to relay push.");
+                return null;
+            }
+            return mSinchClient.relayRemotePushNotificationPayload(intent);
+        }
     }
 
     public interface StartFailedListener {
+
         void onStartFailed(SinchError error);
 
         void onStarted();
@@ -182,17 +190,33 @@ public class SinchService extends Service {
 
         @Override
         public void onIncomingCall(CallClient callClient, Call call) {
-            Log.d(TAG, "Incoming call");
-
-            final DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
-            final UserCalls user = new UserCalls(call.getRemoteUserId(),0);
-            dbHelper.addUserCall(user);
+            Log.d(TAG, "onIncomingCall: " + call.getCallId());
             Intent intent = new Intent(SinchService.this, IncomingCallScreenActivity.class);
             intent.putExtra(CALL_ID, call.getCallId());
-            intent.putExtra("IsIncoming","yes");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             SinchService.this.startActivity(intent);
         }
     }
 
+
+    private class PersistedSettings {
+
+        private SharedPreferences mStore;
+
+        private static final String PREF_KEY = "Sinch";
+
+        public PersistedSettings(Context context) {
+            mStore = context.getSharedPreferences(PREF_KEY, MODE_PRIVATE);
+        }
+
+        public String getUsername() {
+            return mStore.getString("Username", "");
+        }
+
+        public void setUsername(String username) {
+            SharedPreferences.Editor editor = mStore.edit();
+            editor.putString("Username", username);
+            editor.commit();
+        }
+    }
 }

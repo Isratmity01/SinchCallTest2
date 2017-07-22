@@ -6,16 +6,16 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
 
-public abstract class BaseActivity extends AppCompatActivity implements ServiceConnection {
+import com.example.isjahan.sinchcalltest.SinchService;
+
+public abstract class BaseActivity extends Activity implements ServiceConnection {
 
     private SinchService.SinchServiceInterface mSinchServiceInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getApplicationContext().bindService(new Intent(this, SinchService.class), this,
                 BIND_AUTO_CREATE);
     }
